@@ -14,9 +14,23 @@ def index(request):
 def analyze(request):
     text = request.GET.get('text')
     removepunc = request.GET.get('removepunctuation','off')
-    if removepunc == 'on':
-        punctuations = '''.,?!:;'"()[]{}...-–/—\&@%$#*+-=><|^_~'''
-        print(text,removepunc)
+    fullcaps = request.GET.get('fullcaps','off')
+    newlineremover = request.GET.get('newlineremover','off')
+    extraspaceremover = request.GET.get('extraspaceremover','off')
+    charcount = request.GET.get('charcount','off')
+    punctuations = '''.,?!:;'"()[]{}...-–/—\&@%$#*+-=><|^_~'''
+
+    if (removepunc == 'on' and fullcaps == 'on' and newlineremover == 'on'):
+        analyzed = ''
+        for char in text:
+            if char not in punctuations and char != '/n':
+                analyzed = analyzed + char.upper()
+
+        params = {'purpose':'Remove Punctuation, Uppercase, NewLine Remover',
+                'analyzed_text':analyzed}
+        return render(request, 'analyze.html',params)
+    
+    elif removepunc == 'on':
         analyzed = ''
         for char in text:
             if char not in punctuations:
@@ -25,6 +39,37 @@ def analyze(request):
         params = {'purpose':'Remove Punctuation',
                 'analyzed_text':analyzed}
         return render(request, 'analyze.html',params)
+    
+    elif fullcaps =='on':
+        analyzed = ''
+        for char in text:
+            analyzed = analyzed + char.upper()
+        params = {'purpose':'Changed to Uppercase','analyzed_text':analyzed}
+        return render(request, 'analyze.html',params)
+     
+    elif newlineremover =='on':
+        analyzed = ''
+        for char in text:
+           if char !="/n":
+            analyzed = analyzed + char
+        params = {'purpose':'Removed Newlines','analyzed_text':analyzed}
+        return render(request, 'analyze.html',params)
+
+    elif extraspaceremover =='on':
+        analyzed = ''
+        for index,char in enumerate(text):
+           if not(text[index] ==" " and text[index+1] == " "):
+                analyzed = analyzed + char
+        params = {'purpose':'Removed Extra space','analyzed_text':analyzed}
+        return render(request, 'analyze.html',params)
+    
+    elif charcount =='on':
+        count = 0
+        for char in text:
+            count += 1
+        params = {'purpose':'Character counted','analyzed_text':count}
+        return render(request, 'analyze.html',params)   
+    
     else:
         return HttpResponse("Error: Invalid")
 
