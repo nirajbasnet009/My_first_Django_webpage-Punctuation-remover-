@@ -32,12 +32,16 @@ def analyze(request):
     
     elif removepunc == 'on':
         analyzed = ''
+        print(text)
+        print(len(text))
         for char in text:
             if char not in punctuations:
+                print(char)
                 analyzed = analyzed + char
-
+        print(analyzed)
         params = {'purpose':'Remove Punctuation',
                 'analyzed_text':analyzed}
+        print(params['analyzed_text'])
         return render(request, 'analyze.html',params)
     
     elif fullcaps =='on':
