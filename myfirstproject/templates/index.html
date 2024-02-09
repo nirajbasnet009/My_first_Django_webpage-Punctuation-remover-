@@ -60,7 +60,16 @@
                 </div>
                 <div class="col-md-6 col-lg-7 d-flex align-items-center">
                   <div class="card-body p-4 p-lg-5 text-light">
-                    <form method="get" action="/analyze">
+                    <form method="post" action="/analyze">
+                      {% csrf_token %}
+                      <!-- When a user is authenticated and 
+                        surfing on the website, Django generates a 
+                        unique CSRF token for each session. 
+                        This token is included in forms or requests 
+                        sent by the user and is checked by the server
+                         to verify that the request is coming from the
+                          authenticated user and not from a malicious
+                           source. -->
                       <div class="d-flex align-items-center mb-3 pb-1">
                         <i
                           class="fas fa-cubes fa-2x me-3"
